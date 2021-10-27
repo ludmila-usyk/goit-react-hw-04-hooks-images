@@ -23,17 +23,24 @@ export default function App() {
       setIsLoading({ isLoading: true });
       pixabayApi
         .fetchPixabayImgs( gallery, page )
-        .then(({data}) => {
-          if (page === 1) {
-            gallery([...data.hits]);
-          } else {
-            gallery (prevState => 
-              setGallery([...prevState, ...data.hits]))
-          }
-          //setGallery (prevState => [...prevState, ...data.hits]);
-          // setPage( page + 1)
+        // .then(({data}) => {
+        //   if (page === 1) {
+        //     gallery([...data.hits]);
+        //   } else {
+        //     gallery (prevState => 
+        //       setGallery([...prevState, ...data.hits]))
+        //   }
+        .then(gallery => {
+          setGallery(prevState => [...prevState, ...gallery]);
         })
 
+          //setGallery (prevState => [...prevState, ...data.hits]);
+          setPage( prevState => prevState + 1)
+        // })
+
+
+
+        
         // .then(data => {
         //   if (page === 1) {
         //     setGallery(data.hits);
@@ -44,7 +51,7 @@ export default function App() {
         //       behavior: 'smooth',
         //     });
         //   }
-        // })
+        })
 
         .catch (error => {setError(error)})
         .finally(() => {
@@ -53,7 +60,6 @@ export default function App() {
             top: document.documentElement.scrollHeight,
             behavior: 'smooth',
           });
-          console.log(setIsLoading)
         }, [ page, query ]);
 
 
