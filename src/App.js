@@ -19,13 +19,33 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+    
       setIsLoading({ isLoading: true });
       pixabayApi
         .fetchPixabayImgs( gallery, page )
         .then(({data}) => {
-          setGallery (prevState => [...prevState, ...data.hits]),
-          page( page + 1)
+          if (page === 1) {
+            gallery([...data.hits]);
+          } else {
+            gallery (prevState => 
+              setGallery([...prevState, ...data.hits]))
+          }
+          //setGallery (prevState => [...prevState, ...data.hits]);
+          // setPage( page + 1)
         })
+
+        // .then(data => {
+        //   if (page === 1) {
+        //     setGallery(data.hits);
+        //   } else {
+        //     setGallery(prevState => [...prevState, ...data.hits]);
+        //     window.scrollTo({
+        //       top: document.documentElement.scrollHeight,
+        //       behavior: 'smooth',
+        //     });
+        //   }
+        // })
+
         .catch (error => {setError(error)})
         .finally(() => {
           setIsLoading( false )})
@@ -33,7 +53,11 @@ export default function App() {
             top: document.documentElement.scrollHeight,
             behavior: 'smooth',
           });
+          console.log(setIsLoading)
         }, [ page, query ]);
+
+
+
 
   const imgClick = largeImageURL => {
     setLargeImage({
